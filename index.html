@@ -56,15 +56,15 @@
 
 <p>Recently reinforcement learning has been used to solve some impressive problems. A special "deep" form of reinforcement learning was used to play Atari games at or above human level skill. AlphaGo used reinforcement learning to beat one of the best human Go players in the world. </p>
 
-<h1>
-<a id="dealing-with-a-messy-world" class="anchor" href="#dealing-with-a-messy-world" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Dealing with a Messy World</h1>
+<h2>
+<a id="dealing-with-a-messy-world" class="anchor" href="#dealing-with-a-messy-world" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Dealing with a Messy World</h2>
 
 <p>One of the reasons roboticists like reinforcement learning is because it can learn to behave in environments that have some randomness to them (called <em>stochasticity</em>). Sometimes actions don't always have the desired effect. Imagine that you are playing baseball and you are up at bat. The ball is pitched and you perform the swing_bat action. Sometimes you strike out, sometimes you hit a single, sometimes you hit a double, sometimes you hit a home run. Each of these possible outcomes have a different probability of occurring. For me, striking out is highly likely and hitting a home run is very unlikely. </p>
 
 <p>The challenge of reinforcement learning starts to become more clear. The robot must choose an action given that it doesn't know exactly what will happen once it performs it. While learning by trial and error it is sometimes making random actions (try running to first base without hitting the ball? It is actually not impossible to steal first base in baseball!) in the hope of stumbling on something good, but not knowing whether it got lucky with the random move or whether it is really a good move to do all the time. </p>
 
-<h1>
-<a id="where-does-reward-come-from" class="anchor" href="#where-does-reward-come-from" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Where Does Reward Come From?</h1>
+<h2>
+<a id="where-does-reward-come-from" class="anchor" href="#where-does-reward-come-from" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Where Does Reward Come From?</h2>
 
 <p>But wait, trial and error learning presupposes that something or someone is telling the robot when it did something good and when it did something bad. We refer to this as a <em>reward signal</em> or a <em>reward function</em>. The reward function gives the robot a number of points after every action. The number of points can be negative, in which case we say the robot is being punished. It is kind of like the robot is playing a game and trying to get as many points as possible, without knowing the rules of the game. </p>
 
