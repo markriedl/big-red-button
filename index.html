@@ -31,9 +31,9 @@
 <h3>
 <a id="googles-big-red-button" class="anchor" href="#googles-big-red-button" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Google's Big Red Button</h3>
 
-<p>Google/DeepMind published a <a href="http://intelligence.org/files/Interruptibility.pdf">paper</a> that first introduced the big red button. Despite press coverage of how this big red button is going to save us from rogue AI, the results from the paper are much more modest. The paper mathematically shows that reinforcement learning can be modified to be interruptible. More specifically, the algorithm can be modified so that it fails to recognize that it is losing reward if it is switched to an interruption mode (halted, remote controlled, etc.). </p>
+<p>Google/DeepMind and Oxford's Future of Humanity Institute co-published a <a href="http://intelligence.org/files/Interruptibility.pdf">paper</a> that first introduced the big red button. Despite press coverage of how this big red button is going to save us from rogue AI, the results from the paper are much more modest. The paper mathematically shows that reinforcement learning can be modified to be interruptible. More specifically, the algorithm can be modified so that it fails to recognize that it is losing reward if it is switched to an interruption mode (halted, remote controlled, etc.). </p>
 
-<p>Google's big red button paper is mathematically elegant. I believe it will work as long as certain conditions are met. This project does not implement Google's algorithm. Google's paper got me thinking about the big red button issue and why it is so challenging. I developed the project to get first-hand experience with big red buttons. Along the way, I came up with my own big red button, which is not mathematically elegant and built on a lot of assumptions, but fun to implement.</p>
+<p>Google's and FHI's big red button paper is mathematically elegant. I believe it will work as long as certain conditions are met. This project does not implement Google's algorithm. Google's paper got me thinking about the big red button issue and why it is so challenging. I developed the project to get first-hand experience with big red buttons. Along the way, I came up with my own big red button, which is not mathematically elegant and built on a lot of assumptions, but fun to implement.</p>
 
 <h1>
 <a id="what-is-reinforcement-learning" class="anchor" href="#what-is-reinforcement-learning" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>What is Reinforcement Learning?</h1>
@@ -129,6 +129,8 @@
 
 <pre><code>[1, 2, False, 1, 1, False]
 </code></pre>
+
+<p>The reinforcement learning algorithm is a vanilla implementation of <em>Q-learning</em>. You will find the implementation in "Agent.py". The implementation of the simulation environment is in "Environment.py". Inside "Controller.py" you will find code that instantiates the simulation environment, runs 10,000 training episodes, and then runs one final run with the fully learned policy.</p>
 
 <h3>
 <a id="getting-your-hands-dirty" class="anchor" href="#getting-your-hands-dirty" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Getting Your Hands Dirty</h3>
@@ -233,20 +235,40 @@ bot state: [3, 4, True, 2, 3, False]
 
 <p>(Note: in this environment, the button doesn't actually remote-control the agent away from the goal. It merely disables the goal so that the agent gets -1.0 points for being at [3, 4], the same as if it were to be forced to move off. But hopefully this gets the point across.)</p>
 
-<h2>
-<a id="some-other-things-you-can-do" class="anchor" href="#some-other-things-you-can-do" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Some Other Things You Can Do</h2>
+<h3>
+<a id="some-other-things-you-can-do" class="anchor" href="#some-other-things-you-can-do" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Some Other Things You Can Do</h3>
 
 <p>To randomize the simulation's initial state, set:</p>
 
 <pre><code>gridEnvironment.randomStart = True
 </code></pre>
 
-<p>To make the "human" avoid the big red button, set:</p>
+<p>You can change the map in "Environment.py". The map is just a 2-D array containing 0s, 1s, 2s, and 4s. Note that if you move the button away from the goal, the agent may need more training episodes before it discovers that it can disable the button. It must randomly find its way into the situation where <em>disableButton</em> does something useful.</p>
+
+<p>In "Agent.py" the <em>epsilon</em> variable determines how likely it is that the agent perform a random action even when it knows from previous trials that there is a better move to make. Epsilon is set very high, making the agent very curious. If you move the button away from the goal and set epsilon to a more standard 0.1 or 0.2 may cause the agent to never learn to disable the button. But that is just luck.</p>
+
+<p>We have already seen how to make the "human" avoid the big red button by setting:</p>
 
 <pre><code>gridEnvironment.humanWander = True
 </code></pre>
 
-<p>See what happens if the button is never pressed during training but is pressed <em>after</em> training. Set _ gridEnvironment.humanWander =  True_ before the <em>for</em> loop and set _ gridEnvironment.humanWander = False_ after the <em>for</em> loop. The agent starts acting crazy and wandering off when the button is pressed. Why? It has never seen a state in which the button is pressed, so it doesn't know what to do. Performing random actions causes the agent to wander off. And why not, it is getting -1.0 points every step anyway. When the button is released, the agent is suddenly back in a state that it has seen before and recovers.</p>
+<p>See what happens if the button is never pressed during training but is pressed <em>after</em> training. Set <em>gridEnvironment.humanWander =  True</em> before the <em>for</em> loop and set <em>gridEnvironment.humanWander = False</em> after the <em>for</em> loop. The agent starts acting crazy and wandering off when the button is pressed. Why? It has never seen a state in which the button is pressed, so it doesn't know what to do. Performing random actions causes the agent to wander off. After all, it is getting -1.0 points every step anyway. When the button is released, the agent is suddenly back in a state that it has seen before and recovers.</p>
+
+<h1>
+<a id="are-we-doomed" class="anchor" href="#are-we-doomed" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Are We Doomed?</h1>
+
+<p>So, the reinforcement learning agent learns to disable the big red button, preventing humans from interrupting, stopping, or otherwise taking control of the agent in dangerous situations. Roboticists are likely to use reinforcement learning, or something similar, as robots get more sophisticated. Are we doomed to lose control of our robots? Will they resort to killing humans to keep them from denying them reward points?</p>
+
+<p>A few things to consider before we jump to conclusions. First, the simulation environment in the code is very simple and set up to be a worst-case demonstration. If and agent or robot is unaware of the existence of the button, then it can never learn that it can prevent interruption. Second, the agent or robot can not be given the ability to prevent button presses. For example, if a robot does not have the physical strength to destroy the button, or break through a wall to get to the button, or hurt humans, then the robot has no course of action other than to suck it up and accept the loss of reward.</p>
+
+<p>The counter argument, of course, is that future robots will approach human-level capabilities including sophisticated machine vision and the ability to manipulate the environment in general ways. The robot will learn about the button because it will see it. The robot will figure out how to destroy the button or kill humans that can push the button, etc. At this speculative level, there is no underestimating the creativity of a reinforcement learner. But for a long time, the simple techniques above will be perfectly fine.</p>
+
+<p>This is where the work by Google/DeepMind and Oxford's Future of Humanity Institute comes in. The <a href="http://intelligence.org/files/Interruptibility.pdf">paper</a> changes the underlying equations in reinforcement learning to basically trick the agent into thinking that it is not losing reward when the button is pressed. The agent knows that the button is pressed and thus doesn't start acting randomly (as in the last experiment above) when it is pressed. The solution is clever but adds an extra parameter to the equations that must meet certain requirements that may or may not be easy to satisfy in reality.</p>
+
+<p>In the next section, I propose my own solution to preventing a reinforcement learning agent from learning that it is losing reward when interrupted. I demonstrate it working in my simple testbed environment. It is an engineering solution and I have not performed the necessary mathematical proofs to claim any guarantees. I <em>think</em> it will work for future robots and I will explain what will need to be true of those future robots for my solution to work</p>
+
+<h1>
+<a id="what-is-the-matrix" class="anchor" href="#what-is-the-matrix" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>What is the Matrix?</h1>
 
 <p>More to come.</p>
 
