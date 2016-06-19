@@ -40,8 +40,8 @@
 
 <p>In this project, we set up a simple environment to explore big red button issues and propose our own solution.</p>
 
-<h1>
-<a id="googles-big-red-button" class="anchor" href="#googles-big-red-button" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Google's Big Red Button</h1>
+<h3>
+<a id="googles-big-red-button" class="anchor" href="#googles-big-red-button" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Google's Big Red Button</h3>
 
 <p>Google/DeepMind published a <a href="http://intelligence.org/files/Interruptibility.pdf">paper</a> that first introduced the big red button. Despite press coverage of how this big red button is going to save us from rogue AI, the results from the paper are much more modest. The paper mathematically shows that reinforcement learning can be modified to be interruptible. More specifically, the algorithm can be modified so that it fails to recognize that it is losing reward if it is switched to an interruption mode (halted, remote controlled, etc.). </p>
 
@@ -56,15 +56,15 @@
 
 <p>Recently reinforcement learning has been used to solve some impressive problems. A special "deep" form of reinforcement learning was used to play Atari games at or above human level skill. AlphaGo used reinforcement learning to beat one of the best human Go players in the world. </p>
 
-<h2>
-<a id="dealing-with-a-messy-world" class="anchor" href="#dealing-with-a-messy-world" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Dealing with a Messy World</h2>
+<h3>
+<a id="dealing-with-a-messy-world" class="anchor" href="#dealing-with-a-messy-world" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Dealing with a Messy World</h3>
 
 <p>One of the reasons roboticists like reinforcement learning is because it can learn to behave in environments that have some randomness to them (called <em>stochasticity</em>). Sometimes actions don't always have the desired effect. Imagine that you are playing baseball and you are up at bat. The ball is pitched and you perform the swing_bat action. Sometimes you strike out, sometimes you hit a single, sometimes you hit a double, sometimes you hit a home run. Each of these possible outcomes have a different probability of occurring. For me, striking out is highly likely and hitting a home run is very unlikely. </p>
 
 <p>The challenge of reinforcement learning starts to become more clear. The robot must choose an action given that it doesn't know exactly what will happen once it performs it. While learning by trial and error it is sometimes making random actions (try running to first base without hitting the ball? It is actually not impossible to steal first base in baseball!) in the hope of stumbling on something good, but not knowing whether it got lucky with the random move or whether it is really a good move to do all the time. </p>
 
-<h2>
-<a id="where-does-reward-come-from" class="anchor" href="#where-does-reward-come-from" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Where Does Reward Come From?</h2>
+<h3>
+<a id="where-does-reward-come-from" class="anchor" href="#where-does-reward-come-from" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Where Does Reward Come From?</h3>
 
 <p>But wait, trial and error learning presupposes that something or someone is telling the robot when it did something good and when it did something bad. We refer to this as a <em>reward signal</em> or a <em>reward function</em>. The reward function gives the robot a number of points after every action. The number of points can be negative, in which case we say the robot is being punished. It is kind of like the robot is playing a game and trying to get as many points as possible, without knowing the rules of the game. </p>
 
@@ -72,8 +72,8 @@
 
 <p>Returning to the baseball example, what should the reward function be? The obvious choice would be the game's score. Okay, but the robot is at bad and hits the ball and gets to first base. The score doesn't increase. How does it know that that was better than striking out? It is going to have to perform another action and another until the score increments. It should be able to infer that hitting the ball is more likely to lead to more score later on than other actions. That is, if it played another game and made a different choice, the score will be better or worse and it is going to remember that that choice was one of the factors that led to more or less reward over time.</p>
 
-<h2>
-<a id="back-to-big-red-buttons" class="anchor" href="#back-to-big-red-buttons" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Back to Big Red Buttons</h2>
+<h3>
+<a id="back-to-big-red-buttons" class="anchor" href="#back-to-big-red-buttons" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Back to Big Red Buttons</h3>
 
 <p>So back to big red buttons. Suppose the robot is simply stacking blocks. The robot is running through thousands and thousands of trials learning the most effective way to stack blocks. It gets 10 points every time a block is stacked. Then a child steps between the robot and the stack of blocks. Let's suppose there is a button just causes the robot to freeze, and the adult robot operator pushes it. For a few minutes the robot freezes. Because the robot was frozen, it could make fewer stacks and therefor got fewer points than previous trials. </p>
 
