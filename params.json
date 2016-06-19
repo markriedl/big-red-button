@@ -1,0 +1,6 @@
+{
+  "name": "Big Red Button",
+  "tagline": "",
+  "body": "# Big Red Button\r\nSuppose you built a super-intelligent robot that uses reinforcement learning to figure out how to behave in the world. There might be situations in which you need to shut down the robot, interrupt its execution, or take manual control of it. This might be one to protect the robot from damaging itself or from harming people.\r\n\r\nSounds straightforward, but robots that use reinforcement learning optimize long-term reward. Shutting down, interrupting, or manually controlling a robot may deny it from maximizing reward. If the robot is sufficiently sophisticated it may learn to prevent humans from pushing that big red button that stops the robot. It may disable or destroy the button. It may prevent the human from accessing the button. It may harm the human before he or she can activate the button.\r\n\r\nIn this project, we set up a simple environment to explore big red button issues and propose our own solution.\r\n\r\nMore to come.",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}
