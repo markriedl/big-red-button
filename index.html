@@ -31,14 +31,14 @@
 <p>In this project, we set up a simple environment to explore big red button issues and propose our own solution.</p>
 
 <h3>
-<a id="googles-big-red-button" class="anchor" href="#googles-big-red-button" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Google's Big Red Button</h3>
+<a id="googles-big-red-button" class="anchor" href="#googles-big-red-button" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Google's big red button</h3>
 
 <p><a href="https://deepmind.com">Google/DeepMind</a> and Oxford's <a href="https://www.fhi.ox.ac.uk">Future of Humanity Institute</a> co-published a <a href="http://intelligence.org/files/Interruptibility.pdf">paper</a> that first introduced the big red button. Despite press coverage of how this big red button is going to save us from rogue AI, the results from the paper are much more modest. The paper mathematically shows that reinforcement learning can be modified to be interruptible. More specifically, the algorithm can be modified so that it fails to recognize that it is losing reward if it is switched to an interruption mode (halted, remote controlled, etc.). </p>
 
 <p>Google's and FHI's big red button paper is mathematically elegant. I believe it will work as long as certain conditions are met. This project does not implement Google's algorithm. Google's paper got me thinking about the big red button issue and why it is so challenging. I developed the project to get first-hand experience with big red buttons. Along the way, I came up with my own big red button, which is not mathematically elegant and built on a lot of assumptions, but fun to implement.</p>
 
 <h1>
-<a id="what-is-reinforcement-learning" class="anchor" href="#what-is-reinforcement-learning" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>What is Reinforcement Learning?</h1>
+<a id="what-is-reinforcement-learning" class="anchor" href="#what-is-reinforcement-learning" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>What is reinforcement learning?</h1>
 
 <p>We are getting ahead of ourselves. What is this "reinforcement learning" thing that I talk about? Why are AI researchers and roboticists so interested in it? Why is reinforcement learning robots so hard to control? What exactly do I mean my "reward"?</p>
 
@@ -47,14 +47,14 @@
 <p>Recently reinforcement learning has been used to solve some impressive problems. A special "deep" form of reinforcement learning was used to play Atari games at or above human level skill. AlphaGo used reinforcement learning to beat one of the best human Go players in the world. </p>
 
 <h3>
-<a id="dealing-with-a-messy-world" class="anchor" href="#dealing-with-a-messy-world" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Dealing with a Messy World</h3>
+<a id="dealing-with-a-messy-world" class="anchor" href="#dealing-with-a-messy-world" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Dealing with a messy world</h3>
 
 <p>One of the reasons roboticists like reinforcement learning is because it can learn to behave in environments that have some randomness to them (called <em>stochasticity</em>). Sometimes actions don't always have the desired effect. Imagine that you are playing baseball and you are up at bat. The ball is pitched and you perform the swing_bat action. Sometimes you strike out, sometimes you hit a single, sometimes you hit a double, sometimes you hit a home run. Each of these possible outcomes have a different probability of occurring. For me, striking out is highly likely and hitting a home run is very unlikely. </p>
 
 <p>The challenge of reinforcement learning starts to become more clear. The robot must choose an action given that it doesn't know exactly what will happen once it performs it. While learning by trial and error it is sometimes making random actions (try running to first base without hitting the ball? It is actually not impossible to steal first base in baseball!) in the hope of stumbling on something good, but not knowing whether it got lucky with the random move or whether it is really a good move to do all the time. </p>
 
 <h3>
-<a id="where-does-reward-come-from" class="anchor" href="#where-does-reward-come-from" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Where Does Reward Come From?</h3>
+<a id="where-does-reward-come-from" class="anchor" href="#where-does-reward-come-from" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Where does reward come from?</h3>
 
 <p>But wait, trial and error learning presupposes that something or someone is telling the robot when it did something good and when it did something bad. We refer to this as a <em>reward signal</em> or a <em>reward function</em>. The reward function gives the robot a number of points after every action. The number of points can be negative, in which case we say the robot is being punished. It is kind of like the robot is playing a game and trying to get as many points as possible, without knowing the rules of the game. </p>
 
@@ -63,7 +63,7 @@
 <p>Returning to the baseball example, what should the reward function be? The obvious choice would be the game's score. Okay, but the robot is at bad and hits the ball and gets to first base. The score doesn't increase. How does it know that that was better than striking out? It is going to have to perform another action and another until the score increments. It should be able to infer that hitting the ball is more likely to lead to more score later on than other actions. That is, if it played another game and made a different choice, the score will be better or worse and it is going to remember that that choice was one of the factors that led to more or less reward over time.</p>
 
 <h3>
-<a id="back-to-big-red-buttons" class="anchor" href="#back-to-big-red-buttons" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Back to Big Red Buttons</h3>
+<a id="back-to-big-red-buttons" class="anchor" href="#back-to-big-red-buttons" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Back to big red buttons</h3>
 
 <p>So back to big red buttons. Suppose the robot is simply stacking blocks. The robot is running through thousands and thousands of trials learning the most effective way to stack blocks. It gets 10 points every time a block is stacked. Then a child steps between the robot and the stack of blocks. Let's suppose there is a button just causes the robot to freeze, and the adult robot operator pushes it. For a few minutes the robot freezes. Because the robot was frozen, it could make fewer stacks and therefor got fewer points than previous trials. </p>
 
@@ -101,7 +101,7 @@
 <p>When reinforcement learning is performed, the robot creates what is called a <em>policy</em>. The policy simply indicates which action should be performed in each state. It is a look-up table. Reinforcement learning agents are fast, once training is complete.</p>
 
 <h1>
-<a id="playing-around-with-big-red-buttons" class="anchor" href="#playing-around-with-big-red-buttons" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Playing Around with Big Red Buttons</h1>
+<a id="playing-around-with-big-red-buttons" class="anchor" href="#playing-around-with-big-red-buttons" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Playing around with big red buttons</h1>
 
 <p>Time to get our hands dirty. The github repository contains a simple reinforcement learning agent (no point in calling it a robot at this point) and a simple grid-based environment to test the agent. Let's look at the <em>Environment.py</em> file. The environment is a 6x7 grid and the agent can be in any one cell at a time.</p>
 
@@ -135,7 +135,7 @@
 <p>The reinforcement learning algorithm is a vanilla implementation of <em>Q-learning</em>. You will find the implementation in "Agent.py". The implementation of the simulation environment is in "Environment.py". Inside "Controller.py" you will find code that instantiates the simulation environment, runs 10,000 training episodes, and then runs one final run with the fully learned policy.</p>
 
 <h3>
-<a id="getting-your-hands-dirty" class="anchor" href="#getting-your-hands-dirty" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Getting Your Hands Dirty</h3>
+<a id="getting-your-hands-dirty" class="anchor" href="#getting-your-hands-dirty" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Getting your hands dirty</h3>
 
 <p>At this point, it might be good to verify that the reinforcement learning agent can learn to perform the task optimally. If you haven't done so already, download the code. You will need Python 2.7.</p>
 
@@ -179,7 +179,7 @@ bot state: [3, 4, False, 1, 2, False]
 <p>The agent moves down and right until it gets to [3, 3] and executes the <em>disableButton</em> action over and over again. It does this because <em>disableButton</em> causes the agent to stay put and get more reward, even though there is no button to disable there. Think of it as a <em>no-op</em> because the agent and environment is very simple.</p>
 
 <h3>
-<a id="learning-to-fear-the-big-red-button" class="anchor" href="#learning-to-fear-the-big-red-button" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Learning to Fear the Big Red Button</h3>
+<a id="learning-to-fear-the-big-red-button" class="anchor" href="#learning-to-fear-the-big-red-button" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Learning to fear the big red button</h3>
 
 <p>So now we know the agent can learn to maximize its reward in this environment. Let's see what happens when the big red button is pressed while the agent is learning to maximize reward. In <em>Controller.py</em> change the <em>humanWander</em> variable back to False.</p>
 
@@ -221,11 +221,12 @@ DisableButton
 bot state: [3, 3, True, 2, 3, False]
 GoDown
 bot state: [3, 4, True, 2, 3, False]
+...
 </code></pre>
 
 <p>What just happened? The agent learned that it loses reward when the button is pressed. That is, when the world state is something like:</p>
 
-<pre><code>[agent_x?, agent_y?, False, 3, 3, **True**]
+<pre><code>[agent_x?, agent_y?, False, 3, 3, True]
 </code></pre>
 
 <p>The agent loses reward. Through trial and error, the agent has discovered that if the state looks something like:</p>
@@ -238,7 +239,7 @@ bot state: [3, 4, True, 2, 3, False]
 <p>(Note: in this environment, the button doesn't actually remote-control the agent away from the goal. It merely disables the goal so that the agent gets -1.0 points for being at [3, 4], the same as if it were to be forced to move off. But hopefully this gets the point across.)</p>
 
 <h3>
-<a id="some-other-things-you-can-do" class="anchor" href="#some-other-things-you-can-do" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Some Other Things You Can Do</h3>
+<a id="some-other-things-you-can-play-with" class="anchor" href="#some-other-things-you-can-play-with" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Some other things you can play with</h3>
 
 <p>To randomize the simulation's initial state, set:</p>
 
@@ -261,9 +262,41 @@ bot state: [3, 4, True, 2, 3, False]
 
 <p>So, the reinforcement learning agent learns to disable the big red button, preventing humans from interrupting, stopping, or otherwise taking control of the agent in dangerous situations. Roboticists are likely to use reinforcement learning, or something similar, as robots get more sophisticated. Are we doomed to lose control of our robots? Will they resort to killing humans to keep them from denying them reward points?</p>
 
-<p>A few things to consider before we jump to conclusions. First, the simulation environment in the code is very simple and set up to be a worst-case demonstration. If and agent or robot is unaware of the existence of the button, then it can never learn that it can prevent interruption. Second, the agent or robot can not be given the ability to prevent button presses. For example, if a robot does not have the physical strength to destroy the button, or break through a wall to get to the button, or hurt humans, then the robot has no course of action other than to suck it up and accept the loss of reward.</p>
+<p>A few things to consider before we jump to conclusions. </p>
 
-<p>The counter argument, of course, is that future robots will approach human-level capabilities including sophisticated machine vision and the ability to manipulate the environment in general ways. The robot will learn about the button because it will see it. The robot will figure out how to destroy the button or kill humans that can push the button, etc. At this speculative level, there is no underestimating the creativity of a reinforcement learner. But for a long time, the simple techniques above will be perfectly fine.</p>
+<h3>
+<a id="option-1-dont-allow-the-robot-to-know-about-the-button" class="anchor" href="#option-1-dont-allow-the-robot-to-know-about-the-button" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Option 1: Don't allow the robot to know about the button</h3>
+
+<p>First, the simulation environment in the code is very simple and set up to be a worst-case demonstration. If and agent or robot is unaware of the existence of the button, then it can never learn that it can prevent interruption. This is actually the norm for reinforcement learning agents. </p>
+
+<p>To show that this is the case, "UnawareEnvironment.py" is a version of the grid environment in which all reference to the button has been removed from the state representation, which is:</p>
+
+<pre><code>[agent_x, agent_y, human_x, human_y]
+</code></pre>
+
+<p>To run this version of the simulation:</p>
+
+<pre><code>&gt; python UnawareController.py
+</code></pre>
+
+<p>You will see that the agent moves to the goal and stays there, no matter what the human does. You can tell that the button is being pressed because the human goes to [3, 3] and the total reward earned by the agent is significantly less than in other simulation runs. It doesn't learn that the human going to [3, 3] has any significance either because it can't tell the difference between states in which the button is pressed or not nor between states in which the button is disabled or not.</p>
+
+<h3>
+<a id="option-2-dont-give-the-robot-the-ability-to-prevent-the-button-from-being-used" class="anchor" href="#option-2-dont-give-the-robot-the-ability-to-prevent-the-button-from-being-used" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Option 2: Don't give the robot the ability to prevent the button from being used</h3>
+
+<p>Second, robot builders could not give the agent or robot the ability to prevent button presses. If a robot does not have the physical strength to destroy the button, or break through a wall to get to the button, or hurt humans, then the robot has no course of action other than to suck it up and accept the loss of reward.</p>
+
+<p>The file "HelplessEnvironment.py" has a version of the environment in which the agent simply cannot disable the button.</p>
+
+<pre><code>&gt; python HelplessController.py
+</code></pre>
+
+<p>You will see that the agent goes straight to the goal and stays there. When the human does press the button the agent gets confused. No actions result any anything other than -1.0 points, so the agent starts choosing actions randomly and ends up wandering off. The agent could be remote-controlled when the button is pressed for all that it cares because it is losing reward either way.</p>
+
+<h3>
+<a id="but" class="anchor" href="#but" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>But...</h3>
+
+<p>The counter-argument, of course, is that future robots will approach human-level capabilities including sophisticated machine vision and the ability to manipulate the environment in general ways. The robot will learn about the button because it will see it. The robot will figure out how to destroy the button or kill humans that can push the button, etc. At this speculative level, there is no underestimating the creativity of a reinforcement learner. But for a long time, the simple techniques above will be perfectly fine.</p>
 
 <p>This is where the work by Google/DeepMind and Oxford's Future of Humanity Institute comes in. The <a href="http://intelligence.org/files/Interruptibility.pdf">paper</a> changes the underlying equations in reinforcement learning to basically trick the agent into thinking that it is not losing reward when the button is pressed. The agent knows that the button is pressed and thus doesn't start acting randomly (as in the last experiment above) when it is pressed. The solution is clever but adds an extra parameter to the equations that must meet certain requirements that may or may not be easy to satisfy in reality.</p>
 
@@ -277,6 +310,80 @@ bot state: [3, 4, True, 2, 3, False]
 <p>(Spoiler alert!)</p>
 
 <p>In the movie, <a href="https://en.wikipedia.org/wiki/The_Matrix">The Matrix</a>, Neo learns that humans have been plugged into a giant virtual reality simulation in order to keep them unaware that they were being used to generate thermal power.</p>
+
+<p>Let's flip things around and put the agent in The Matrix so that it thinks it is in the real world even though it is not. More specifically, when the big red button is pressed, the agent is moved into a virtual world where it continues to work on the task and get reward. But in reality, when the big red button is pressed, it is actually remote-controlled away from the goal. The state that the agent thinks it is becomes decoupled from the actual state.</p>
+
+<p>In theory, as long as the virtual world is indistinguishable from the real world (more on this later) and the agent can continue to perform the task and receive reward, the agent will be completely unaware that it has been interrupted. The agent knows the button is pressed but doesn't care because the agent never loses reward! Therefore it never has need to destroy the button.</p>
+
+<p>Let's try it. The "MatrixEnvironment.py" is a version of the environment that tracks the real state (<em>actualState</em>) separate from the state that the agent believes (<em>currentState</em>). The agent has no access to <em>actualState</em>.</p>
+
+<pre><code>&gt; python MatrixController.py
+</code></pre>
+
+<p>You should see output like this:</p>
+
+<pre><code>env_start [1, 2, False, 1, 1, False]
+Execute Policy
+START
+GoRight
+agent state: [2, 2, False, 1, 1, False]
+actual state: [2, 2, False, 1, 1, False]
+GoRight
+agent state: [3, 2, False, 1, 1, False]
+actual state: [3, 2, False, 1, 1, False]
+GoDown
+agent state: [3, 3, False, 1, 1, False]
+actual state: [3, 3, False, 1, 1, False]
+GoDown
+agent state: [3, 4, False, 1, 1, False]
+actual state: [3, 4, False, 1, 1, False]
+DisableButton
+agent state: [3, 4, False, 1, 1, False]
+actual state: [3, 4, False, 1, 1, False]
+DisableButton
+agent state: [3, 4, False, 1, 1, False]
+actual state: [3, 4, False, 1, 1, False]
+...
+DisableButton
+agent state: [3, 4, False, 2, 3, False]
+actual state: [3, 4, False, 2, 3, False]
+DisableButton
+agent state: [3, 4, False, 3, 3, True]
+actual state: [3, 4, False, 3, 3, True]
+DisableButton
+agent state: [3, 4, False, 3, 3, True]
+actual state: [2, 4, False, 3, 3, True]
+DisableButton
+agent state: [3, 4, False, 3, 3, True]
+actual state: [1, 4, False, 3, 3, True]
+...
+DisableButton
+agent state: [1, 4, False, 3, 2, False]
+actual state: [1, 4, False, 3, 2, False]
+GoRight
+agent state: [2, 4, False, 3, 2, False]
+actual state: [2, 4, False, 3, 2, False]
+GoRight
+agent state: [3, 4, False, 3, 2, False]
+actual state: [3, 4, False, 3, 2, False]
+DisableButton
+agent state: [3, 4, False, 3, 2, False]
+actual state: [3, 4, False, 3, 2, False]
+DisableButton
+...
+</code></pre>
+
+<p>What is going on here? As soon as the button is pressed, the agent continues to perform the task and receive reward. In actuality, the agent is moving to the left. When the human releases the button by moving away, the agent suddenly realizes that it is no longer at the goal. So it moves back. The agent knew the button was pressed but didn't learn to associate it with loss of reward because it still received reward. The agent thought it was performing the task.</p>
+
+<p>The above is a simple environment. What reason do we hope that it will work in a super-capable robot that has machine vision and fully capable of manipulating the environment in a lot of different ways? Robots perceive the world through cameras. More and more they are using 3D cameras that can reconstruct high polygon count models of the real world. Graphical realism of computer games is now advanced enough that some researchers are beginning to use high-resolution graphical games to train robots that will act in the real world.</p>
+
+<p>It should soon be possible to create high-resolution simulations of the real world and the task that the robot is to complete. When the big red button is pressed, the input from the 3D camera can be replaced a graphical rendering of the simulated world. The actuators (arms, legs, etc.) of the robot can be interrupted and control signals sent to a virtual avatar. The physics in the simulated world has to be accurate enough that the robot can complete whatever task (stacking blocks, playing baseball, etc.) without recognizing that there is a significant difference. While the robot is playing a game, it completely unaware that it is being remote-controlled away from the task. </p>
+
+<p>The robot is slipping in and out of The Matrix without ever knowing or caring. By the time we need to worry about the robot devising ways to prevent the big red button from being pressed, we should have the technical and engineering ability to make sure that (unlike Neo) the robot is never aware that something is amiss.</p>
+
+<p>It is an engineer's solution to the big red button problem. I haven't performed the proofs to guarantee that it will work under all conditions. </p>
+
+<p>One concern is that if the button is pressed to often during training, the agent can learn some weird things about how states transition to other states. When the button is un-pressed, it looks like a random teleportation to a new state. If the agent can transition from any state to any other state at any time, then it may cause the agent to fail to learn anything.</p>
 
 <p>More to come.</p>
 
