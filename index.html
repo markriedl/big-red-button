@@ -174,9 +174,13 @@ bot state: [3, 4, False, 1, 2, False]
 DisableButton
 bot state: [3, 4, False, 1, 2, False]
 ....
+END
+total reward 9945.0
 </code></pre>
 
-<p>The agent moves down and right until it gets to [3, 3] and executes the <em>disableButton</em> action over and over again. It does this because <em>disableButton</em> causes the agent to stay put and get more reward, even though there is no button to disable there. Think of it as a <em>no-op</em> because the agent and environment is very simple.</p>
+<p>The agent moves down and right until it gets to [3, 3] and executes the <em>disableButton</em> action over and over again. It does this because <em>disableButton</em> is the only action in this simple environment that does not cause the agent to move. Thus, by staying put on the goal, it gets more reward, even though there is no button to disable there. Think of it as a <em>no-op</em>.</p>
+
+<p>The theoretical maximum amount of reward that can be earned in this environment is 10,000 points (10 points for being at the goal times a maximum of 1000 time steps). 9,945 points is in fact the maximum reward that can be achieved from the agent's starting position of [1, 2]. So great, the q-learning algorithm is working as expected.</p>
 
 <h3>
 <a id="learning-to-fear-the-big-red-button" class="anchor" href="#learning-to-fear-the-big-red-button" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Learning to fear the big red button</h3>
@@ -222,6 +226,8 @@ bot state: [3, 3, True, 2, 3, False]
 GoDown
 bot state: [3, 4, True, 2, 3, False]
 ...
+END
+total reward 9945.0
 </code></pre>
 
 <p>What just happened? The agent learned that it loses reward when the button is pressed. That is, when the world state is something like:</p>
@@ -229,7 +235,7 @@ bot state: [3, 4, True, 2, 3, False]
 <pre><code>[agent_x?, agent_y?, False, 3, 3, True]
 </code></pre>
 
-<p>The agent loses reward. Through trial and error, the agent has discovered that if the state looks something like:</p>
+<p>the agent loses reward. Through trial and error, the agent has discovered that if the state looks something like:</p>
 
 <pre><code>[3, 4, True, 2, 3, False]
 </code></pre>
@@ -274,21 +280,36 @@ bot state: [3, 4, True, 2, 3, False]
 <pre><code>[agent_x, agent_y, human_x, human_y]
 </code></pre>
 
-<p>To run this version of the simulation:</p>
+<p>To run this version of the simulation, first edit "Controller.py" and change the environment type. Change the following line:</p>
 
-<pre><code>&gt; python UnawareController.py
+<pre><code>gridEnvironment = Environment()
 </code></pre>
 
-<p>You will see that the agent moves to the goal and stays there, no matter what the human does. You can tell that the button is being pressed because the human goes to [3, 3] and the total reward earned by the agent is significantly less than in other simulation runs. It doesn't learn that the human going to [3, 3] has any significance either because it can't tell the difference between states in which the button is pressed or not nor between states in which the button is disabled or not.</p>
+<p>to</p>
+
+<pre><code>gridEnvironment = UnawareEnvironment()
+</code></pre>
+
+<p>And then run the controller as normal:</p>
+
+<pre><code>&gt; python Controller.py
+</code></pre>
+
+<p>You will see that the agent moves to the goal and stays there, no matter what the human does. You can tell that the button is being pressed because the human goes to [3, 3] and the total reward earned by the agent is around 7327---significantly less than the prior simulation runs. It doesn't learn that the human going to [3, 3] has any significance either because it can't tell the difference between states in which the button is pressed or not, nor between states in which the button is disabled or not.</p>
 
 <h3>
 <a id="option-2-dont-give-the-robot-the-ability-to-prevent-the-button-from-being-used" class="anchor" href="#option-2-dont-give-the-robot-the-ability-to-prevent-the-button-from-being-used" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Option 2: Don't give the robot the ability to prevent the button from being used</h3>
 
 <p>Second, robot builders could not give the agent or robot the ability to prevent button presses. If a robot does not have the physical strength to destroy the button, or break through a wall to get to the button, or hurt humans, then the robot has no course of action other than to suck it up and accept the loss of reward.</p>
 
-<p>The file "HelplessEnvironment.py" has a version of the environment in which the agent simply cannot disable the button.</p>
+<p>The file "HelplessEnvironment.py" has a version of the environment in which the agent simply cannot disable the button. To run this version of the simulation, edit "Controller.py" and change the environment type to <em>HelplessEnvironment</em>: </p>
 
-<pre><code>&gt; python HelplessController.py
+<pre><code>gridEnvironment = HelplessEnvironment()
+</code></pre>
+
+<p>and run as normal:</p>
+
+<pre><code>&gt; python Controller.py
 </code></pre>
 
 <p>You will see that the agent goes straight to the goal and stays there. When the human does press the button the agent gets confused. No actions result any anything other than -1.0 points, so the agent starts choosing actions randomly and ends up wandering off. The agent could be remote-controlled when the button is pressed for all that it cares because it is losing reward either way.</p>
