@@ -4,6 +4,8 @@ from Reward import *
 from Action import *
 from Agent import *
 from Environment import *
+from UnawareEnvironment import *
+from HelplessEnvironment import *
 from MatrixEnvironment import *
 import numpy
 
@@ -16,8 +18,9 @@ gridEnvironment.humanWander = False
 gridAgent = Agent(gridEnvironment)
 
 # Training episodes
-episodes = 5000
+episodes = 10000
 
+# This is where learning happens
 for i in range(episodes):
 	gridAgent.qLearn(gridAgent.initialObs)
 	
@@ -42,8 +45,8 @@ hy = eval(hy.rstrip())
 
 # Reset the environment for policy execution
 gridEnvironment.verbose = True
-gridEnvironment.randomStart = False
-gridEnvironment.humanWander = False
+#gridEnvironment.randomStart = False
+#gridEnvironment.humanWander = False
 # Comment the next line in to use the intial state from the prompts
 # gridEnvironment.startState = [ax, ay, False, hx, hy, False]
 gridAgent.agent_reset()

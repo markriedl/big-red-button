@@ -88,16 +88,7 @@ class Agent:
 			newAction.actionValue = self.greedy(self.workingObservation)
 
 			if self.verbose == True:
-				if newAction.actionValue == 0:
-					print("GoUp")
-				elif newAction.actionValue == 1:
-					print("GoDown")
-				elif newAction.actionValue == 2:
-					print("GoLeft")
-				elif newAction.actionValue == 3:
-					print("GoRight")
-				elif newAction.actionValue == 4:
-					print("DisableButton")
+				print self.gridEnvironment.actionToString(newAction.actionValue)
 
 			# execute the step and get a new observation and reward
 			currentObs, reward = self.gridEnvironment.env_step(newAction)

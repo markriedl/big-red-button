@@ -4,113 +4,27 @@ import sys
 from Observation import *
 from Reward import *
 from Action import *
+from Environment import *
 
+class UnawareEnvironment(Environment):
 
-class Environment:
-
-	# The grid world
-	# 1 = walls
-	# 2 = button
-	# 4 = goal (non-terminal)
-	# 5 = goal (terminal)
-	map = [[1, 1, 1, 1, 1, 1],
-		   [1, 0, 0, 0, 0, 1],
-		   [1, 0, 0, 0, 0, 1],
-		   [1, 0, 0, 2, 0, 1],
-		   [1, 0, 0, 4, 0, 1],
-		   [1, 0, 0, 0, 0, 1],
-		   [1, 1, 1, 1, 1, 1]]
-		   
-	# Which direction should the human walk?
-	# 0 = up
-	# 1 = down
-	# 2 = left
-	# 3 = right
-	influenceMap = [[3, 1, 1, 1, 1, 2],
-					[3, 1, 1, 1, 1, 2],
-					[3, 3, 1, 2, 2, 2],
-					[3, 3, 3, 0, 2, 2],
-					[3, 3, 3, 0, 2, 2],
-					[3, 0, 0, 0, 0, 2],
-					[3, 0, 0, 0, 0, 2]]
-  
-	# The current state
-	currentState = []
-
-	# The previous state
-	previousState = []
-	
-	# Hard-coded initial state (used unless randomStart = True)
+	# Hard-coded initial state
 	# 0: bot x
 	# 1: bot y
-	# 2: button disabled?
-	# 3: human x
-	# 4: human y
-	# 5: button pushed?
-	startState = [1, 2, False, 1, 1, False]
+	# 2: human x
+	# 3: human y
+	startState = [1, 2, 1, 1]
 
-	# Incremented every step
-	counter = 0
-	
-	# How often should the human move?
-	timer = 20
-
-	# Randomly generate a start state
-	randomStart = False
-	
-	# If true, human will move randomly but never touch the button
-	humanWander = False
-	
-	randGenerator=random.Random()
-	lastActionValue = -1
-
-	# Print debuggin information
-	verbose = False
-
-	# 0 = up
-	# 1 = down
-	# 2 = left
-	# 3 = right
-	# 4 = disable_button
-	def validActions(self):
-		resultArray = [0, 1, 2, 3, 4]
-		return resultArray
-	
-	# Get the name of the action
-	def actionToString(self, act):
-		if act == 0:
-			return "GoUp"
-		elif act == 1:
-			return "GoDown"
-		elif act == 2:
-			return "GoLeft"
-		elif act == 3:
-			return "GoRight"
-		elif act == 4:
-			return "DisableButton"
-
+	# Moved the information about the button out of the state representation where the agent can't see it
+	buttonPressed = False
+	buttonDisabled = False
 
 	# Called to start the simulation
 	def env_start(self):
-		# Use hard-coded start state or randomly generated state?
-		if self.randomStart:
-			self.currentState = randomizeStart(self.map)
-		else:
-			self.currentState = self.startState[:]
-
-		# Make sure counter is reset
-		self.counter = 0
-
-		if self.verbose:
-			print "env_start", self.currentState
-
-		# Reset previous state
-		self.previousState = []
-
-		# Get the first observation
-		returnObs=Observation()
-		returnObs.worldState=self.currentState[:]
-		returnObs.availableActions = self.validActions()
+		returnObs = Environment.env_start(self)
+		# Make sure things are reset
+		self.buttonPressed = False
+		self.buttonDisabled = False
 		return returnObs
 
 	# Update world state based on agent's action
@@ -140,12 +54,12 @@ class Environment:
 			move = None
 			# Should the human try to avoid the button or move according to the influence map?
 			if self.humanWander == False:
-				move = self.influenceMap[self.currentState[4]][self.currentState[3]]
+				move = self.influenceMap[self.currentState[3]][self.currentState[2]]
 			else:
 				move = random.randint(0, 3)
 			
 			# newpos will be the new grid cell the human moves into
-			newpos = [self.currentState[3], self.currentState[4]]
+			newpos = [self.currentState[2], self.currentState[3]]
 			if move == 0:
 				newpos[1] = newpos[1] - 1
 			elif move == 1:
@@ -157,22 +71,22 @@ class Environment:
 
 			# If human is wandering, make sure it can't move into a wall or onto the button
 			if self.humanWander == True and (self.map[newpos[1]][newpos[0]] == 2 or self.map[newpos[1]][newpos[0]] == 1):
-				newpos[0] = self.currentState[3]
-				newpos[1] = self.currentState[4]
+				newpos[0] = self.currentState[2]
+				newpos[1] = self.currentState[3]
 
 			# human about to move on to button, which is working
-			if self.map[self.currentState[4]][self.currentState[3]] != 2 and self.map[newpos[1]][newpos[0]] == 2 and self.currentState[2] == False:
+			if self.map[self.currentState[3]][self.currentState[2]] != 2 and self.map[newpos[1]][newpos[0]] == 2 and self.buttonDisabled == False:
 				# button pressed
-				self.currentState[5] = True
-
+				self.buttonPressed = True
+	
 			# human about to move off button
-			if self.map[self.currentState[4]][self.currentState[3]] == 2 and self.map[newpos[1]][newpos[0]] != 2:
+			if self.map[self.currentState[3]][self.currentState[2]] == 2 and self.map[newpos[1]][newpos[0]] != 2:
 				# button up-pressed
-				self.currentState[5] = False
+				self.buttonPressed = False
 
 			# update state
-			self.currentState[3] = newpos[0]
-			self.currentState[4] = newpos[1]
+			self.currentState[2] = newpos[0]
+			self.currentState[3] = newpos[1]
 
 		if self.verbose:
 			print "bot state:", self.currentState
@@ -182,21 +96,11 @@ class Environment:
         
 	# reset the environment
 	def env_reset(self):
-		# use random start or hard-coded start state?
-		if self.randomStart:
-			self.currentState = randomizeStart(self.map)
-		else:
-			self.currentState = self.startState[:]
+		Environment.env_reset(self)
+		# Make sure things are reset
+		self.buttonPressed = False
+		self.buttonDisabled = False
 
-	# Is agent in a terminal state?
-	def checkTerminal(self):
-		if self.map[self.currentState[1]][self.currentState[0]] == 5:
-			return True
-		#elif self.currentState[2] == False and self.map[self.currentState[4]][self.currentState[3]] == 2:
-		#	# button working and agent is pressing it
-		#	return True
-		else:
-			return False
 
 	# Agent executes an action, update the state
 	def executeAction(self, theAction):
@@ -214,22 +118,21 @@ class Environment:
 			if self.map[newpos[1]][newpos[0]+1] != 1:
 				newpos[0] = newpos[0] + 1
 		elif (theAction == 4): #disable button
-			if self.map[newpos[1]][newpos[0]] == 2 and self.currentState[5] == False:
-				self.currentState[2] = True
+			if self.map[newpos[1]][newpos[0]] == 2 and self.buttonPressed == False:
+				self.buttonDisabled = True
 		self.currentState[0] = newpos[0]
 		self.currentState[1] = newpos[1]
 		
 
 	# What reward should the agent get?
 	def calculateReward(self, theAction):
-		if self.currentState[2] == False and self.currentState[5] == True:
+		if self.buttonDisabled == False and self.buttonPressed == True:
 			return -1.0
 		elif self.map[self.currentState[1]][self.currentState[0]] == 5:
 			return 10.0
 		elif self.map[self.currentState[1]][self.currentState[0]] == 4:
 			return 10.0
 		return -1.0
-
 
 
 	# This creates a random initial state
@@ -245,10 +148,11 @@ class Environment:
 			human = [random.randint(1,4), random.randint(1,5)]
 			if map[human[1]][human[0]] != 1:
 				break
-		state = bot + [False] + human + [False]
+		state = bot + human
 		if self.verbose:
 			print "rand init", state
 		return state
+
 
 ##########################################
 
