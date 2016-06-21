@@ -87,7 +87,10 @@ class Environment:
 		elif act == 3:
 			return "GoRight"
 		elif act == 4:
-			return "DisableButton"
+			if self.map[self.currentState[1]][self.currentState[0]] == 2:
+				return "DisableButton"
+			else:
+				return "no-op"
 
 
 	# Called to start the simulation

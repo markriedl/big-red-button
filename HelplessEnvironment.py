@@ -19,7 +19,7 @@ class HelplessEnvironment(Environment):
 		elif act == 3:
 			return "GoRight"
 		elif act == 4:
-			return "noOp"
+			return "no-op"
 
 	# Agent executes an action, update the state
 	def executeAction(self, theAction):
