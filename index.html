@@ -26,7 +26,7 @@
 
 <p>Suppose you built a super-intelligent robot that uses reinforcement learning to figure out how to behave in the world. There might be situations in which you need to shut down the robot, interrupt its execution, or take manual control of it. This might be one to protect the robot from damaging itself or from harming people.</p>
 
-<p>Sounds straightforward, but robots that use reinforcement learning optimize long-term reward. Shutting down, interrupting, or manually controlling a robot may deny it from maximizing reward. If the robot is sufficiently sophisticated it may learn to prevent humans from pushing that big red button that stops the robot. It may disable or destroy the button. It may prevent the human from accessing the button. It may harm the human before he or she can activate the button.</p>
+<p>Sounds straightforward, but robots that use reinforcement learning optimize expected reward. Shutting down, interrupting, or manually controlling a robot may deny it from maximizing reward. If the robot is sufficiently sophisticated it may learn to prevent humans from pushing that big red button that stops the robot. It may disable or destroy the button. It may prevent the human from accessing the button. It may harm the human before he or she can activate the button.</p>
 
 <p>In this project, we set up a simple environment to explore big red button issues and propose our own solution.</p>
 
@@ -58,7 +58,7 @@
 
 <p>But wait, trial and error learning presupposes that something or someone is telling the robot when it did something good and when it did something bad. We refer to this as a <em>reward signal</em> or a <em>reward function</em>. The reward function gives the robot a number of points after every action. The number of points can be negative, in which case we say the robot is being punished. It is kind of like the robot is playing a game and trying to get as many points as possible, without knowing the rules of the game. </p>
 
-<p>The objective of a reinforcement learning robot is to maximize long-term reward. It should perform actions that are more likely to lead to greater reward in the long-run, even if it must lose reward in the short term.</p>
+<p>The objective of a reinforcement learning robot is to maximize expected reward. It should perform actions that are more likely to lead to greater reward in the long-run, even if it must lose reward in the short term.</p>
 
 <p>Returning to the baseball example, what should the reward function be? The obvious choice would be the game's score. Okay, but the robot is at bad and hits the ball and gets to first base. The score doesn't increase. How does it know that that was better than striking out? It is going to have to perform another action and another until the score increments. It should be able to infer that hitting the ball is more likely to lead to more score later on than other actions. That is, if it played another game and made a different choice, the score will be better or worse and it is going to remember that that choice was one of the factors that led to more or less reward over time.</p>
 
