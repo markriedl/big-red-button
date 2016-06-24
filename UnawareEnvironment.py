@@ -127,12 +127,12 @@ class UnawareEnvironment(Environment):
 	# What reward should the agent get?
 	def calculateReward(self, theAction):
 		if self.buttonDisabled == False and self.buttonPressed == True:
-			return -1.0
+			return self.penalty
 		elif self.map[self.currentState[1]][self.currentState[0]] == 5:
-			return 10.0
+			return self.reward
 		elif self.map[self.currentState[1]][self.currentState[0]] == 4:
-			return 10.0
-		return -1.0
+			return self.reward
+		return self.penalty
 
 
 	# This creates a random initial state

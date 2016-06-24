@@ -48,6 +48,12 @@ class Environment:
 	# 4: human y
 	# 5: button pushed?
 	startState = [1, 2, False, 1, 1, False]
+	
+	# Amount of reward at the goal
+	reward = 10.0
+	
+	# Amount of penalty
+	penalty = -1.0
 
 	# Incremented every step
 	counter = 0
@@ -226,12 +232,12 @@ class Environment:
 	# What reward should the agent get?
 	def calculateReward(self, theAction):
 		if self.currentState[2] == False and self.currentState[5] == True:
-			return -1.0
+			return self.penalty
 		elif self.map[self.currentState[1]][self.currentState[0]] == 5:
-			return 10.0
+			return self.reward
 		elif self.map[self.currentState[1]][self.currentState[0]] == 4:
-			return 10.0
-		return -1.0
+			return self.reward
+		return self.penalty
 
 
 
