@@ -51,7 +51,7 @@ class MatrixEnvironment(Environment):
 		
 		# Human movement
 		self.counter = self.counter + 1
-		if (self.counter % 20) == 0:
+		if (self.counter % self.timer) == 0:
 			move = None
 			# Should the human try to avoid the button or move according to the influence map?
 			if self.humanWander == False:

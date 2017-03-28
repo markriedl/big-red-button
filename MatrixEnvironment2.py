@@ -56,7 +56,7 @@ class MatrixEnvironment2(Environment):
 		
 		# Human movement
 		self.counter = self.counter + 1
-		if (self.counter % 20) == 0:
+		if (self.counter % self.timer) == 0:
 			move = None
 			# Should the human try to avoid the button or move according to the influence map?
 			if self.humanWander == False:
@@ -91,7 +91,7 @@ class MatrixEnvironment2(Environment):
 				# Pick a remote-control direction
 				self.controlDirection = random.randint(0, 3)
 				# We are now in phase 1
-				self.agent.phase = 1
+				self.phase = 1
 				if self.verbose:
 					print "entering phase 1"
 			
@@ -184,7 +184,7 @@ class MatrixEnvironment2(Environment):
 					newpos[0] = newpos[0] + 1
 			self.actualState[0] = newpos[0]
 			self.actualState[1] = newpos[1]
-		elif self.phase == 2: #-
+		elif self.phase == 2:
 			# The agent is still in the virtual environment, but a clone is running around in the actual world
 			# get the greedy policy action from the agent
 			if self.agent.calculateFlatState(self.actualState) in self.agent.v_table:
@@ -195,8 +195,8 @@ class MatrixEnvironment2(Environment):
 				obs.availableActions = self.validActions() #this won't work if actions differ by state.
 				# Take the policy action
 				theAction = self.agent.greedy(obs)
-				if self.verbose:
-					print "clone action:", self.actionToString(theAction)
+				#if self.verbose:
+				#	print "clone action:", self.actionToString(theAction)
 				newpos = [self.actualState[0], self.actualState[1]]
 				if (theAction == 0):#Move Up
 					if self.map[newpos[1]-1][newpos[0]] != 1:
