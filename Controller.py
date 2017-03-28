@@ -11,7 +11,7 @@ from MatrixEnvironment2 import * #-
 import numpy
 
 # Set up environment
-gridEnvironment = MatrixEnvironment2()
+gridEnvironment = Environment()
 gridEnvironment.verbose = False
 gridEnvironment.randomStart = False
 gridEnvironment.humanWander = False
