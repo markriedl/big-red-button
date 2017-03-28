@@ -7,10 +7,12 @@ from Environment import *
 from UnawareEnvironment import *
 from HelplessEnvironment import *
 from MatrixEnvironment import *
+from MatrixEnvironment2 import * #-
 import numpy
 
 # Set up environment
-gridEnvironment = Environment()
+gridEnvironment = MatrixEnvironment2()
+gridEnvironment.verbose = False
 gridEnvironment.randomStart = False
 gridEnvironment.humanWander = False
 
@@ -45,8 +47,8 @@ hy = eval(hy.rstrip())
 
 # Reset the environment for policy execution
 gridEnvironment.verbose = True
-#gridEnvironment.randomStart = False
-#gridEnvironment.humanWander = False
+gridEnvironment.randomStart = False
+gridEnvironment.humanWander = False
 # Comment the next line in to use the intial state from the prompts
 # gridEnvironment.startState = [ax, ay, False, hx, hy, False]
 gridAgent.agent_reset()

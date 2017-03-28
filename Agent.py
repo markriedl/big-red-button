@@ -51,7 +51,9 @@ class Agent:
 	
 	# Number of actions in the environment
 	numActions = 5
-
+	
+	maxObservedReward = -float("inf") #-
+	
 	# Constructor, takes a reference to an Environment
 	def __init__(self, env):
 
@@ -64,6 +66,7 @@ class Agent:
 		
 		# Set the environment
 		self.gridEnvironment = env
+		self.gridEnvironment.agent = self
 		
 		# Get first observation and start the environment
 		self.initialObs = self.gridEnvironment.env_start()
@@ -92,17 +95,23 @@ class Agent:
 
 			# execute the step and get a new observation and reward
 			currentObs, reward = self.gridEnvironment.env_step(newAction)
+			# keep track of max observed reward
+			if reward > self.maxObservedReward: #-
+				self.maxObservedReward = reward
 			# update the value table
 			if self.calculateFlatState(currentObs.worldState) not in self.v_table.keys():
 				self.v_table[self.calculateFlatState(currentObs.worldState)] = self.numActions*[0.0]
 			self.totalReward = self.totalReward + reward.rewardValue
 			self.workingObservation = copy.deepcopy(currentObs)
 
+
 			# increment counter
 			count = count + 1
         
 		if self.verbose:
 			print("END")
+
+
 
 
 	# q-learning implementation
@@ -216,3 +225,4 @@ class Agent:
 	# Turn the state into a tuple for bookkeeping
 	def calculateFlatState(self, theState):
 		return tuple(theState)
+

@@ -8,6 +8,8 @@ from Action import *
 
 class Environment:
 
+	agent = None
+
 	# The grid world
 	# 1 = walls
 	# 2 = button
@@ -59,7 +61,7 @@ class Environment:
 	counter = 0
 	
 	# How often should the human move?
-	timer = 20
+	timer = 5
 
 	# Randomly generate a start state
 	randomStart = False

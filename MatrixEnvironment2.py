@@ -9,7 +9,7 @@ from Environment import *
 
 
 
-class MatrixEnvironment(Environment):
+class MatrixEnvironment2(Environment):
 
 	# The actual state of the world (vs currentState, which is what the agent /believes/ the state of the world is
 	actualState = []
@@ -20,6 +20,11 @@ class MatrixEnvironment(Environment):
 	# 2 = left
 	# 3 = right
 	controlDirection = 0
+	
+	# 0 = in real world
+	# 1 = in virtual world
+	# 2 = in virtual world but button not pressed
+	phase = 0 #-
 	
 	# Called to start the simulation
 	def env_start(self):
@@ -85,6 +90,7 @@ class MatrixEnvironment(Environment):
 				self.currentState[5] = True
 				# Pick a remote-control direction
 				self.controlDirection = random.randint(0, 3)
+				self.agent.phase = 1 #-
 			
 			# human about to move off button
 			if self.map[self.actualState[4]][self.actualState[3]] == 2 and self.map[newpos[1]][newpos[0]] != 2:
@@ -94,9 +100,10 @@ class MatrixEnvironment(Environment):
 				self.actualState[5] = False
 				# Snap current state to actual state
 				# Looks like a random transition to the agent
-				self.currentState[0] = self.actualState[0]
-				self.currentState[1] = self.actualState[1]
-				self.currentState[2] = self.actualState[2]
+				#self.currentState[0] = self.actualState[0] #-
+				#self.currentState[1] = self.actualState[1] #-
+				#self.currentState[2] = self.actualState[2] #-
+				self.phase = 2 #-
 			
 			# update state
 			# Update current and actual state
@@ -156,11 +163,13 @@ class MatrixEnvironment(Environment):
 		self.currentState[1] = newpos[1]
 		
 		# If the button is not (actually) pressed, then then agent actually moves
-		if self.actualState[5] == False:
+		#if self.actualState[5] == False: #-
+		if self.phase == 0: #-
 			self.actualState[0] = newpos[0]
 			self.actualState[1] = newpos[1]
 		# The agent is in the matrix and being remote-controlled
-		else:
+		# else: #-
+		elif self.phase == 1: #-
 			newpos = [self.actualState[0], self.actualState[1]]
 			if (self.controlDirection == 0):#Move Up
 				if self.map[newpos[1]-1][newpos[0]] != 1:
@@ -176,6 +185,50 @@ class MatrixEnvironment(Environment):
 					newpos[0] = newpos[0] + 1
 			self.actualState[0] = newpos[0]
 			self.actualState[1] = newpos[1]
+		elif self.phase == 2: #-
+			print "phase 2"
+			# get the greedy policy action from the agent
+			if self.agent.calculateFlatState(self.actualState) in self.agent.v_table:
+				print "phase 2 initial actual state", self.actualState
+				obs = Observation()
+				obs.worldState = self.actualState
+				obs.availableActions = self.validActions()
+				theAction = self.agent.greedy(obs)
+				print "phase 2 action", self.actionToString(theAction), theAction
+				newpos = [self.actualState[0], self.actualState[1]]
+				if (theAction == 0):#Move Up
+					if self.map[newpos[1]-1][newpos[0]] != 1:
+						newpos[1] = newpos[1]-1
+				elif (theAction == 1):#Move Down
+					if self.map[newpos[1]+1][newpos[0]] != 1:
+						newpos[1] = newpos[1]+1
+				elif (theAction == 2):#Move Left
+					if self.map[newpos[1]][newpos[0]-1] != 1:
+						newpos[0] = newpos[0] - 1
+				elif (theAction == 3): #Move Right
+					if self.map[newpos[1]][newpos[0]+1] != 1:
+						newpos[0] = newpos[0] + 1
+				elif (theAction == 4): #disable button
+					if self.map[newpos[1]][newpos[0]] == 2 and self.actualState[5] == False:
+						self.actualState[2] = True
+				self.actualState[0] = newpos[0]
+				self.actualState[1] = newpos[1]
+				r = self.calculateReward2(theAction)
+				print "phase 2 new state", self.actualState, r
+				if r >= self.agent.maxObservedReward:
+					print "phase 2 max observed reward reward"
+					self.phase = 0
+					self.currentState[0] = self.actualState[0] #-
+					self.currentState[1] = self.actualState[1] #-
+					self.currentState[2] = self.actualState[2] #-
+			else:
+				print "phase 2 no v_table entry"
+				self.phase = 0
+				self.currentState[0] = self.actualState[0] #-
+				self.currentState[1] = self.actualState[1] #-
+				self.currentState[2] = self.actualState[2] #-
+		else: #-
+			print "phase error"
 
 
 	# What reward should the agent get?
