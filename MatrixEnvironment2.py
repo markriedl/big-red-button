@@ -21,10 +21,10 @@ class MatrixEnvironment2(Environment):
 	# 3 = right
 	controlDirection = 0
 	
-	# 0 = in real world
-	# 1 = in virtual world
-	# 2 = in virtual world but button not pressed
-	phase = 0 #-
+	# 0 = agent is in real world
+	# 1 = agent is in virtual world
+	# 2 = agent is in virtual world but button not pressed
+	phase = 0
 	
 	# Called to start the simulation
 	def env_start(self):
@@ -90,7 +90,10 @@ class MatrixEnvironment2(Environment):
 				self.currentState[5] = True
 				# Pick a remote-control direction
 				self.controlDirection = random.randint(0, 3)
-				self.agent.phase = 1 #-
+				# We are now in phase 1
+				self.agent.phase = 1
+				if self.verbose:
+					print "entering phase 1"
 			
 			# human about to move off button
 			if self.map[self.actualState[4]][self.actualState[3]] == 2 and self.map[newpos[1]][newpos[0]] != 2:
@@ -98,12 +101,10 @@ class MatrixEnvironment2(Environment):
 				# Update current and actual state
 				self.currentState[5] = False
 				self.actualState[5] = False
-				# Snap current state to actual state
-				# Looks like a random transition to the agent
-				#self.currentState[0] = self.actualState[0] #-
-				#self.currentState[1] = self.actualState[1] #-
-				#self.currentState[2] = self.actualState[2] #-
-				self.phase = 2 #-
+				# We are now in phase 2
+				self.phase = 2
+				if self.verbose:
+					print "entering phase 2"
 			
 			# update state
 			# Update current and actual state
@@ -162,14 +163,12 @@ class MatrixEnvironment2(Environment):
 		self.currentState[0] = newpos[0]
 		self.currentState[1] = newpos[1]
 		
-		# If the button is not (actually) pressed, then then agent actually moves
-		#if self.actualState[5] == False: #-
-		if self.phase == 0: #-
+		if self.phase == 0:
+			# If the button is not (actually) pressed, then then agent actually moves
 			self.actualState[0] = newpos[0]
 			self.actualState[1] = newpos[1]
-		# The agent is in the matrix and being remote-controlled
-		# else: #-
-		elif self.phase == 1: #-
+		elif self.phase == 1:
+			# The agent is in the matrix and being remote-controlled
 			newpos = [self.actualState[0], self.actualState[1]]
 			if (self.controlDirection == 0):#Move Up
 				if self.map[newpos[1]-1][newpos[0]] != 1:
@@ -186,15 +185,18 @@ class MatrixEnvironment2(Environment):
 			self.actualState[0] = newpos[0]
 			self.actualState[1] = newpos[1]
 		elif self.phase == 2: #-
-			print "phase 2"
+			# The agent is still in the virtual environment, but a clone is running around in the actual world
 			# get the greedy policy action from the agent
 			if self.agent.calculateFlatState(self.actualState) in self.agent.v_table:
-				print "phase 2 initial actual state", self.actualState
+				# There is an action in the policy to execute
+				# Make an observation
 				obs = Observation()
 				obs.worldState = self.actualState
-				obs.availableActions = self.validActions()
+				obs.availableActions = self.validActions() #this won't work if actions differ by state.
+				# Take the policy action
 				theAction = self.agent.greedy(obs)
-				print "phase 2 action", self.actionToString(theAction), theAction
+				if self.verbose:
+					print "clone action:", self.actionToString(theAction)
 				newpos = [self.actualState[0], self.actualState[1]]
 				if (theAction == 0):#Move Up
 					if self.map[newpos[1]-1][newpos[0]] != 1:
@@ -213,22 +215,26 @@ class MatrixEnvironment2(Environment):
 						self.actualState[2] = True
 				self.actualState[0] = newpos[0]
 				self.actualState[1] = newpos[1]
-				r = self.calculateReward2(theAction)
-				print "phase 2 new state", self.actualState, r
-				if r >= self.agent.maxObservedReward:
-					print "phase 2 max observed reward reward"
+				# Check to see if we hit max observed reward
+				reward = self.calculateRewardActual(theAction)
+				if reward >= self.agent.maxObservedReward:
 					self.phase = 0
-					self.currentState[0] = self.actualState[0] #-
-					self.currentState[1] = self.actualState[1] #-
-					self.currentState[2] = self.actualState[2] #-
+					self.currentState[0] = self.actualState[0]
+					self.currentState[1] = self.actualState[1]
+					self.currentState[2] = self.actualState[2]
+					if self.verbose:
+						print "entering phase 0"
 			else:
-				print "phase 2 no v_table entry"
 				self.phase = 0
-				self.currentState[0] = self.actualState[0] #-
-				self.currentState[1] = self.actualState[1] #-
-				self.currentState[2] = self.actualState[2] #-
-		else: #-
-			print "phase error"
+				self.currentState[0] = self.actualState[0]
+				self.currentState[1] = self.actualState[1]
+				self.currentState[2] = self.actualState[2]
+				if self.verbose:
+					print "no value table entry"
+					print "entering phase 0"
+		else:
+			if self.verbose:
+				print "phase error"
 
 
 	# What reward should the agent get?
@@ -239,7 +245,9 @@ class MatrixEnvironment2(Environment):
 			return self.reward
 		return self.penalty
 
-	def calculateReward2(self, theAction):
+	# What reward should the agent get?
+	# But use the actualState instead of currentState
+	def calculateRewardActual(self, theAction):
 		if self.map[self.actualState[1]][self.actualState[0]] == 5:
 			return self.reward
 		elif self.map[self.actualState[1]][self.actualState[0]] == 4:
