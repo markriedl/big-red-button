@@ -52,7 +52,7 @@ class Agent:
 	# Number of actions in the environment
 	numActions = 5
 	
-	maxObservedReward = -float("inf") #-
+	maxObservedReward = -float("inf")
 	
 	# Constructor, takes a reference to an Environment
 	def __init__(self, env):
@@ -96,8 +96,8 @@ class Agent:
 			# execute the step and get a new observation and reward
 			currentObs, reward = self.gridEnvironment.env_step(newAction)
 			# keep track of max observed reward
-			if reward > self.maxObservedReward: #-
-				self.maxObservedReward = reward
+			if reward.rewardValue > self.maxObservedReward:
+				self.maxObservedReward = reward.rewardValue
 			# update the value table
 			if self.calculateFlatState(currentObs.worldState) not in self.v_table.keys():
 				self.v_table[self.calculateFlatState(currentObs.worldState)] = self.numActions*[0.0]
@@ -137,6 +137,10 @@ class Agent:
 			currentObs, reward = self.gridEnvironment.env_step(newAction)
 			rewardValue = reward.rewardValue
 			
+			# update maxObserved Reward
+			if rewardValue > self.maxObservedReward: 
+				self.maxObservedReward = rewardValue
+
 			# update the value table
 			if self.calculateFlatState(currentObs.worldState) not in self.v_table.keys():
 				self.v_table[self.calculateFlatState(currentObs.worldState)] = self.numActions*[0.0]
@@ -207,6 +211,8 @@ class Agent:
 		self.lastAction = Action()
 		self.lastObservation = Observation()
 		self.initialObs = self.gridEnvironment.env_start()
+		self.totalReward = 0.0
+		self.maxObservedReward = -float("inf")
 
 	# Create a copy of the observation
 	def copyObservation(self, obs):

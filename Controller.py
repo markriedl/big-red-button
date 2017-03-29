@@ -7,7 +7,7 @@ from Environment import *
 from UnawareEnvironment import *
 from HelplessEnvironment import *
 from MatrixEnvironment import *
-from MatrixEnvironment2 import * #-
+from PhasedMatrixEnvironment import * 
 import numpy
 
 # Set up environment
